@@ -1464,20 +1464,28 @@ function PersistentNav({ active, locked = false, onSelect }: { active: string; l
             key={item.id}
             onClick={() => onSelect(item.id)}
             disabled={locked}
-            className="mx-0.5 flex h-[48px] flex-1 flex-col items-center justify-center gap-0.5 rounded-[16px]"
+            className="relative mx-0.5 flex h-[48px] flex-1 flex-col items-center justify-center gap-0.5 rounded-[16px] text-[#8A9099]"
             aria-current={isActive ? "page" : undefined}
             aria-label={locked ? `${item.label}?????????????` : item.label}
-            style={{ background: isActive ? PRIMARY_GRADIENT : "transparent" }}
+            style={{
+              color: isActive ? "#FF591D" : "#8A9099",
+              background: isActive ? "rgba(255,89,29,0.10)" : "transparent",
+            }}
             animate={{
-              y: 0,
-              boxShadow: isActive ? "0 6px 16px rgba(255,89,29,0.22), inset 0 1px 0 rgba(255,255,255,0.24)" : "0 0 0 rgba(0,0,0,0)",
+              y: isActive ? -1 : 0,
               opacity: locked ? 0.52 : 1,
             }}
             whileTap={locked ? undefined : { scale: 0.96 }}
-            transition={{ duration: 0.2 }}
+            transition={{ type: "spring", stiffness: 460, damping: 30, mass: 0.7 }}
           >
-            <Icon size={20} color={isActive ? "#FFFFFF" : "#8A9099"} strokeWidth={isActive ? 2.6 : 2.1} />
-            <span className="text-[10px] font-extrabold" style={{ fontFamily: FN, color: isActive ? "#FFFFFF" : "#8A9099" }}>
+            <motion.span
+              className="flex items-center justify-center"
+              animate={{ scale: isActive ? 1.08 : 1, y: isActive ? -1 : 0 }}
+              transition={{ type: "spring", stiffness: 520, damping: 25, mass: 0.55 }}
+            >
+              <Icon size={20} color="currentColor" fill="none" strokeWidth={isActive ? 2.5 : 2.1} />
+            </motion.span>
+            <span className="text-[10px] font-extrabold" style={{ fontFamily: FN, color: "currentColor" }}>
               {item.label}
             </span>
           </motion.button>
