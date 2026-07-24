@@ -3,3 +3,5 @@ dist/
 .wrangler/
 .env*
 *.log
+.vite/
+tmp-ai-frame.png

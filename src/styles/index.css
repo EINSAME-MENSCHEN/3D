@@ -21,6 +21,9 @@
   --xm-large-radius: 24px;
   --xm-shadow: 0 12px 36px rgba(31, 36, 46, 0.075);
   --xm-shadow-soft: 0 4px 16px rgba(31, 36, 46, 0.055);
+  --xm-page-gutter: 16px;
+  --xm-page-top: 64px;
+  --xm-nav-height: 83px;
 }
 
 html {
@@ -32,6 +35,31 @@ html {
 body {
   font-size: 16px;
   line-height: 1.45;
+}
+
+/* Shared mobile product primitives. Keep the visual grammar stable across tabs. */
+.xm-card {
+  border: 1px solid var(--xm-border);
+  border-radius: var(--xm-card-radius);
+  background: var(--xm-surface);
+  box-shadow: var(--xm-shadow-soft);
+}
+
+.xm-card--large {
+  border-radius: var(--xm-large-radius);
+}
+
+.xm-page {
+  font-size: var(--xm-font-body);
+  line-height: 1.4;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .xm-page *,
+  .xm-page *::before,
+  .xm-page *::after {
+    scroll-behavior: auto !important;
+  }
 }
 
 /* Keep compact metadata readable on a 375px iOS layout. */
