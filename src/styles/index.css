@@ -14,8 +14,11 @@
   --xm-font-title: 24px;
   --xm-page: #f6f7f9;
   --xm-surface: #ffffff;
-  --xm-text: #17191d;
-  --xm-muted: #71757d;
+  --xm-text-title: #333333;
+  --xm-text-body: #666666;
+  --xm-text-muted: #999999;
+  --xm-text: var(--xm-text-body);
+  --xm-muted: var(--xm-text-muted);
   --xm-border: rgba(24, 34, 48, 0.08);
   --xm-card-radius: 20px;
   --xm-large-radius: 24px;
@@ -98,6 +101,104 @@ button {
 button:focus-visible {
   outline: 3px solid rgba(255, 138, 31, 0.24);
   outline-offset: 2px;
+}
+
+/* Global neutral text hierarchy. Brand and status colors remain unchanged. */
+:is(
+  [class~="text-[#182230]"],
+  [class~="text-[#17191D]"],
+  [class~="text-[#30343B]"],
+  [class~="text-[#343A43]"],
+  [class~="text-[#111317]"],
+  .text-gray-800,
+  .text-gray-900
+) {
+  color: #333333;
+}
+
+:is(
+  [class~="text-[#3E4651]"],
+  [class~="text-[#4B5563]"],
+  [class~="text-[#5F6670]"],
+  .text-gray-600,
+  .text-gray-700
+) {
+  color: #666666;
+}
+
+:is(
+  [class~="text-[#747B86]"],
+  [class~="text-[#71757D]"],
+  [class~="text-[#8A9099]"],
+  [class~="text-[#8A8F98]"],
+  [class~="text-[#9AA0AA]"],
+  [class~="text-[#9AA0A9]"],
+  [class~="text-[#A3A6AE]"],
+  [class~="text-[#7A818B]"],
+  .text-gray-300,
+  .text-gray-400,
+  .text-gray-500
+) {
+  color: #999999;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #999999;
+}
+
+/* Four-level type-weight system: 800 / 700 / 500 / 400. */
+.font-black {
+  font-weight: 800;
+}
+
+.font-extrabold,
+.font-bold {
+  font-weight: 700;
+}
+
+.font-semibold,
+.font-medium {
+  font-weight: 500;
+}
+
+.xm-page h1,
+.xm-page [class~="text-[22px]"].font-extrabold,
+.xm-page strong {
+  font-weight: 800;
+}
+
+.xm-page h2,
+.xm-page h3,
+.xm-page button {
+  font-weight: 700;
+}
+
+.xm-page input,
+.xm-page textarea {
+  font-weight: 500;
+}
+
+.xm-page .xm-text-body {
+  color: var(--xm-text-body);
+  font-weight: 500;
+}
+
+.xm-page :is(
+  [class~="text-[#747B86]"],
+  [class~="text-[#71757D]"],
+  [class~="text-[#8A9099]"],
+  [class~="text-[#8A8F98]"],
+  [class~="text-[#9AA0AA]"],
+  [class~="text-[#9AA0A9]"],
+  [class~="text-[#A3A6AE]"],
+  [class~="text-[#7A818B]"],
+  [class~="text-[#999999]"],
+  .text-gray-300,
+  .text-gray-400,
+  .text-gray-500
+) {
+  font-weight: 400;
 }
 
 @media (prefers-reduced-motion: reduce) {

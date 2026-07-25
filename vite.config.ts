@@ -16,6 +16,7 @@ function figmaAssetResolver() {
 }
 
 export default defineConfig({
+  base: process.env.GITHUB_ACTIONS === 'true' ? '/3D/' : '/',
   plugins: [
     figmaAssetResolver(),
     react(),
