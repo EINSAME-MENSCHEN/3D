@@ -227,6 +227,15 @@ function WelcomePage({ hasPrinter, onModelSelected, onPrinterAdded, onFlowLockCh
   const allReady = readiness.size === PRINTER_READINESS.length;
 
   useEffect(() => {
+    if (hasPrinter) return;
+    setStatus(null);
+    setChecklistOpen(false);
+    setReadiness(new Set());
+    setWifiPassword("");
+    setShowWifiPassword(false);
+  }, [hasPrinter]);
+
+  useEffect(() => {
     onFlowLockChange(checklistOpen || status !== null);
     return () => onFlowLockChange(false);
   }, [checklistOpen, status, onFlowLockChange]);
@@ -268,7 +277,7 @@ function WelcomePage({ hasPrinter, onModelSelected, onPrinterAdded, onFlowLockCh
         <AiBuddy size={132} mood="happy" />
       </motion.div>
       <motion.section className="mt-5 px-4 text-center" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className={status ? "mx-auto max-w-[320px] text-[22px] font-extrabold leading-tight text-[#182230]" : "mx-auto max-w-[320px] text-[20px] font-black leading-tight text-[#182230]"} style={{ fontFamily: FN }}>{status === "connected" ? "设备连接成功啦" : status === "scanning" ? "正在帮你搜索附近的3D打印机" : status === "found" ? "已帮你找到附近的设备" : status === "wifi" ? "请输入 Wi-Fi 账号和密码，让打印机连上网络" : "让咱们一起来检查一下设备的准备情况吧"}</h1>
+        <h1 className={status ? "mx-auto max-w-[320px] text-[22px] font-extrabold leading-tight text-[#182230]" : "mx-auto max-w-[320px] text-[20px] font-black leading-tight text-[#182230]"} style={{ fontFamily: FN }}>{status === "connected" ? "设备连接成功啦" : status === "scanning" ? "正在帮你搜索附近的3D打印机" : status === "found" ? "已帮你找到附近的设备" : status === "wifi" ? "请输入 Wi-Fi 账号和密码，让打印机连上网络" : checklistOpen ? "连接前请做以下确认事项" : "你好呀，我是小印，让我来帮你完成设备连接吧。"}</h1>
         <p className={status === "wifi" || !status ? "hidden" : "mx-auto mt-2 max-w-[300px] text-[13px] font-medium leading-relaxed text-[#747B86]"} style={{ fontFamily: FN }}>{status === "connected" ? "让我们在下面选一个玩具完成第一次打印吧" : status === "scanning" ? "请耐心等候" : status === "found" ? "点击开始连接吧" : ""}</p>
       </motion.section>
 
@@ -806,6 +815,18 @@ function PrintingPage({ active, onNext, onCancel, model }: { active: boolean; on
           <span>{done ? "可以取出作品啦" : `预计还需 ${Math.max(1, Math.ceil((100 - progress) * 0.09))} 分钟`}</span>
         </div>
         </div>
+        {!done && (
+          <div className="mt-3 border-t border-[#F0F1F3] pt-3">
+            <button
+              type="button"
+              onClick={() => setShowCancelConfirm(true)}
+              className="flex h-11 w-full items-center justify-center rounded-full bg-[#F5F6F8] text-[14px] font-extrabold text-[#E64A14] transition-colors hover:bg-[#FFF7F2] active:scale-[0.98]"
+              style={{ fontFamily: FN }}
+            >
+              取消打印
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Knowledge card */}
@@ -843,17 +864,6 @@ function PrintingPage({ active, onNext, onCancel, model }: { active: boolean; on
           ))}
         </div>
       </section>
-
-      {!done && (
-        <button
-          type="button"
-          onClick={() => setShowCancelConfirm(true)}
-          className="mt-4 flex h-11 w-full items-center justify-center rounded-full border border-[#FFD8C8] bg-white text-[14px] font-extrabold text-[#E64A14] shadow-[0_6px_16px_rgba(48,56,70,0.04)] transition-colors hover:bg-[#FFF7F2] active:scale-[0.98]"
-          style={{ fontFamily: FN }}
-        >
-          取消打印
-        </button>
-      )}
 
       {done && <p className="mt-4 text-center text-xs font-extrabold text-[#16803C]">正在打开作品完成页…</p>}
 
@@ -903,7 +913,7 @@ function PrintingPage({ active, onNext, onCancel, model }: { active: boolean; on
 
 // ??? Page 5: Complete & Reward ????????????????????????????????????????????????
 
-function RewardPage({ onFinish, model }: { onFinish: () => void; model: (typeof MODELS)[number] }) {
+function RewardPage({ onViewWork, onCreateAnother, model }: { onViewWork: () => void; onCreateAnother: () => void; model: (typeof MODELS)[number] }) {
   const reduceMotion = useReducedMotion();
   const completedOn = new Intl.DateTimeFormat("zh-CN", { year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
   const confetti = useRef(
@@ -943,8 +953,8 @@ function RewardPage({ onFinish, model }: { onFinish: () => void; model: (typeof 
         >
           <Trophy size={24} />
         </motion.div>
-        <h1 className="text-[28px] font-extrabold text-[#182230]" style={{ fontFamily: FN }}>打印完成啦！</h1>
-        <p className="text-gray-500 mt-2 text-sm" style={{ fontFamily: FN }}>你成功完成了第一个 3D 打印作品！</p>
+        <h1 className="text-[28px] font-extrabold text-[#182230]" style={{ fontFamily: FN }}>打印完成</h1>
+        <p className="mt-2 text-sm font-medium text-[#666666]" style={{ fontFamily: FN }}>底座可能还有点热，请让家长帮你取出作品。</p>
       </motion.div>
 
       {/* Artwork showcase */}
@@ -984,15 +994,22 @@ function RewardPage({ onFinish, model }: { onFinish: () => void; model: (typeof 
         </motion.span>
         <div className="flex-1">
           <p className="font-bold text-gray-800" style={{ fontFamily: FD }}>首次创作者</p>
-          <p className="text-xs text-yellow-700 mt-0.5" style={{ fontFamily: FN }}>你成功完成了第一个 3D 打印作品！</p>
+          <p className="text-xs text-yellow-700 mt-0.5" style={{ fontFamily: FN }}>获得首枚创作徽章</p>
         </div>
         <span className="rounded-full bg-white px-2.5 py-1 text-xs font-extrabold text-[#B83D12]" style={{ fontFamily: FN }}>
           +50 XP
         </span>
       </motion.div>
 
-      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}>
-        <PrimaryBtn label="继续创作" onClick={onFinish} icon={<ChevronRight size={20} />} />
+      <motion.div className="grid grid-cols-2 gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1 }}>
+        <PrimaryBtn label="查看作品" onClick={onViewWork} />
+        <button
+          type="button"
+          onClick={onCreateAnother}
+          className="flex h-14 w-full items-center justify-center rounded-full bg-[#F5F6F8] text-[16px] font-extrabold text-[#666666] active:scale-[0.98]"
+        >
+          再做一个
+        </button>
       </motion.div>
     </div>
   );
@@ -1629,6 +1646,7 @@ export default function App() {
   const [hasPrinter, setHasPrinter] = usePersistentState("xmaker.hasPrinter", false);
   const [hasCompletedFirstPrint, setHasCompletedFirstPrint] = usePersistentState("xmaker.hasCompletedFirstPrint", false);
   const [selectedModelId, setSelectedModelId] = usePersistentState("xmaker.selectedModelId", 0);
+  const [completedModelId, setCompletedModelId] = usePersistentState("xmaker.completedModelId", 0);
   const [page, setPage] = useState(() => {
     try {
       const savedPrinter = JSON.parse(window.localStorage.getItem("xmaker.hasPrinter") ?? "false");
@@ -1655,6 +1673,7 @@ export default function App() {
   const next = () => setFlowPage(p => p + 1);
   const back = () => setFlowPage(p => Math.max(0, p - 1));
   const selectedModel = MODELS.find(model => model.id === selectedModelId) ?? MODELS[0];
+  const completedModel = MODELS.find(model => model.id === completedModelId) ?? MODELS[0];
 
   useEffect(() => {
     if (!hasPrinter && tab === "ai" && page === 6) setFlowPage(0);
@@ -1690,22 +1709,32 @@ export default function App() {
       key={`printing-${printSessionId}`}
       active={page === 4 && tab === "ai"}
       model={selectedModel}
-      onNext={next}
+      onNext={() => {
+        setHasPrinter(true);
+        setHasCompletedFirstPrint(true);
+        setCompletedModelId(selectedModelId);
+        setFlowPage(5);
+      }}
       onCancel={() => {
         setPrintSessionId(sessionId => sessionId + 1);
         setFlowPage(0);
       }}
     />,
-    <RewardPage model={selectedModel} onFinish={() => {
-      setHasPrinter(true);
-      setHasCompletedFirstPrint(true);
-      setTab("ai");
-      setFlowPage(6);
-    }} />,
+    <RewardPage
+      model={selectedModel}
+      onViewWork={() => {
+        setTab("device");
+        setFlowPage(6);
+      }}
+      onCreateAnother={() => {
+        setTab("ai");
+        setFlowPage(6);
+      }}
+    />,
     <MainApp
       hasPrinter={hasPrinter}
       hasCompletedFirstPrint={hasCompletedFirstPrint}
-      completedModel={selectedModel}
+      completedModel={completedModel}
       onConnect={() => {
         setTab("ai");
         setFlowPage(0);
