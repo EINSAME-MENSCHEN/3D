@@ -1,11 +1,11 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import {
-  Wifi, WifiOff, Check, ChevronRight, ArrowLeft, Volume2, QrCode, ShieldCheck, Brush,
+  Wifi, WifiOff, Check, ChevronRight, ArrowLeft, Volume2, QrCode, ShieldCheck, Layers,
   Clock, Zap, Compass, Printer, PenTool,
   User, BookOpen, Signal, Heart, Menu, Search, Eye, EyeOff,
   Bell, Settings, WalletCards, ClipboardList, Trophy, CircleDollarSign, Flame,
-  Upload, Download, Mic,
+  Upload, Download, Mic, Thermometer,
 } from "lucide-react";
 import aiBuddyGif from "../imports/ai-buddy.gif";
 import exploreRoseBox from "../imports/explore-rose-box.png";
@@ -272,7 +272,7 @@ function WelcomePage({ hasPrinter, onModelSelected, onPrinterAdded, onFlowLockCh
         <p className={status === "wifi" || !status ? "hidden" : "mx-auto mt-2 max-w-[300px] text-[13px] font-medium leading-relaxed text-[#747B86]"} style={{ fontFamily: FN }}>{status === "connected" ? "让我们在下面选一个玩具完成第一次打印吧" : status === "scanning" ? "请耐心等候" : status === "found" ? "点击开始连接吧" : ""}</p>
       </motion.section>
 
-      {!checklistOpen && !status && <div className="mt-5"><PrimaryBtn label="开始连接设备" onClick={() => setChecklistOpen(true)} icon={<Wifi size={19} />} /></div>}
+      {!checklistOpen && !status && <div className="mt-5"><PrimaryBtn label="开始连接设备" onClick={() => setChecklistOpen(true)} icon={<Wifi size={18} />} /></div>}
 
       <AnimatePresence mode="wait">
         {checklistOpen && !status && (
@@ -284,7 +284,7 @@ function WelcomePage({ hasPrinter, onModelSelected, onPrinterAdded, onFlowLockCh
             <div className="mt-3 space-y-1">
               {PRINTER_READINESS.map(item => {
                 const checked = readiness.has(item.id);
-                return <button key={item.id} onClick={() => toggleReadiness(item.id)} aria-pressed={checked} className="flex min-h-11 w-full items-center gap-3 rounded-[14px] px-2 py-1.5 text-left active:bg-[#FFF8EE]"><motion.span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2" animate={{ backgroundColor: checked ? "#FFF0E7" : "#FFFFFF", borderColor: checked ? "#FFD8C8" : "#D6DAE1" }}>{checked && <Check size={13} className="text-[#FF591D]" strokeWidth={3} />}</motion.span><span className="text-[13px] font-bold text-[#3E4651]">{item.label}</span></button>;
+                return <button key={item.id} onClick={() => toggleReadiness(item.id)} aria-pressed={checked} className="flex min-h-11 w-full items-center gap-3 rounded-[14px] px-2 py-1.5 text-left active:bg-[#FFF8EE]"><motion.span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2" animate={{ backgroundColor: checked ? "#FFF0E7" : "#FFFFFF", borderColor: checked ? "#FFD8C8" : "#D6DAE1" }}>{checked && <Check size={14} className="text-[#FF591D]" strokeWidth={3} />}</motion.span><span className="text-[13px] font-bold text-[#3E4651]">{item.label}</span></button>;
               })}
             </div>
               <div className="mt-3"><PrimaryBtn label={allReady ? "开始搜索打印机" : `还需确认 ${PRINTER_READINESS.length - readiness.size} 项`} onClick={() => setStatus("scanning")} disabled={!allReady} icon={<Wifi size={18} />} /></div>
@@ -335,7 +335,7 @@ function WelcomePage({ hasPrinter, onModelSelected, onPrinterAdded, onFlowLockCh
       {status && status !== "wifi" && status !== "scanning" && status !== "found" && status !== "connected" && (
           <motion.div key={status} className="mt-4 flex items-center gap-3 rounded-[20px] border border-[#E9EBF0] bg-white px-4 py-3 shadow-[0_8px_22px_rgba(48,56,70,0.06)]" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
             <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-2xl" style={{ background: status === "found" || status === "connected" ? "#E7F8EC" : "#FFF0E7" }}>
-              {status === "found" ? <img src={printerReference} alt="X-MAKER Pro 打印机" className="h-full w-full object-contain" /> : status === "connected" ? <Check size={22} className="text-green-600" /> : <Printer size={22} className="text-[#FF591D]" />}
+              {status === "found" ? <img src={printerReference} alt="X-MAKER Pro 打印机" className="h-full w-full object-contain" /> : status === "connected" ? <Check size={24} className="text-green-600" /> : <Printer size={24} className="text-[#FF591D]" />}
             </div>
             <div className="min-w-0 flex-1"><p className="text-sm font-extrabold" style={{ color: connectionCopy[status].color }}>{connectionCopy[status].title}</p><p className="mt-0.5 text-xs text-[#8A9099]">{connectionCopy[status].detail}</p></div>
           </motion.div>
@@ -353,7 +353,7 @@ function WelcomePage({ hasPrinter, onModelSelected, onPrinterAdded, onFlowLockCh
               {showWifiPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
           </div>
-          <div className="mt-3"><PrimaryBtn label="连接 Wi-Fi" onClick={() => setStatus("connecting")} disabled={!wifiName.trim() || !wifiPassword.trim()} icon={<Wifi size={17} />} /></div>
+          <div className="mt-3"><PrimaryBtn label="连接 Wi-Fi" onClick={() => setStatus("connecting")} disabled={!wifiName.trim() || !wifiPassword.trim()} icon={<Wifi size={18} />} /></div>
         </motion.section>
       )}
 
@@ -364,8 +364,8 @@ function WelcomePage({ hasPrinter, onModelSelected, onPrinterAdded, onFlowLockCh
 
       {status === "connected" && (
         <motion.section className="mt-4" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-          <div className="mb-3 flex items-center justify-between px-1"><h2 className="text-[17px] font-extrabold text-[#182230]">简单易打印</h2><span className="rounded-full bg-[#FFF0E7] px-2.5 py-1 text-[10px] font-extrabold text-[#B83D12]">新手推荐</span></div>
-          <div className="grid grid-cols-3 gap-2">{MODELS.map(model => <motion.button key={model.id} onClick={() => onModelSelected(model.id)} className="overflow-hidden rounded-[18px] border border-[#E9EBF0] bg-white p-2 text-left shadow-[0_6px_16px_rgba(48,56,70,0.05)] active:scale-[0.97]"><div className="flex h-[68px] items-center justify-center rounded-[13px] p-1" style={{ background: model.cardBg }}><img src={model.image} alt={model.name} className="h-full w-full object-contain mix-blend-multiply" /></div><p className="mt-2 truncate text-[12px] font-extrabold text-[#182230]">{model.name}</p><p className="mt-0.5 flex items-center gap-1 text-[9px] font-semibold text-[#8A9099]"><Clock size={9} />{model.time}</p></motion.button>)}</div>
+          <div className="mb-3 px-1"><h2 className="text-[17px] font-extrabold text-[#182230]">推荐模型</h2></div>
+          <div className="grid grid-cols-3 gap-2">{MODELS.map(model => <motion.button key={model.id} onClick={() => onModelSelected(model.id)} className="overflow-hidden rounded-[18px] border border-[#E9EBF0] bg-white p-2 text-left shadow-[0_6px_16px_rgba(48,56,70,0.05)] active:scale-[0.97]"><div className="flex h-[68px] items-center justify-center rounded-[13px] p-1" style={{ background: model.cardBg }}><img src={model.image} alt={model.name} className="h-full w-full object-contain mix-blend-multiply" /></div><p className="mt-2 truncate text-[12px] font-extrabold text-[#182230]">{model.name}</p><p className="mt-0.5 flex items-center gap-1 text-[9px] font-semibold text-[#8A9099]"><Clock size={14} />{model.time}</p></motion.button>)}</div>
         </motion.section>
       )}
     </div>
@@ -437,7 +437,7 @@ function ConnectPage({ onNext, onBack }: { onNext: () => void; onBack: () => voi
           animate={status === "connected" ? { scale: [1, 1.12, 1] } : {}}
           transition={{ duration: 0.45 }}
         >
-          <Printer size={38} className={status === "connected" ? "text-green-500" : "text-[#FF591D]"} />
+          <Printer size={24} className={status === "connected" ? "text-green-500" : "text-[#FF591D]"} />
         </motion.div>
         {status === "connected" && (
           <motion.div
@@ -447,7 +447,7 @@ function ConnectPage({ onNext, onBack }: { onNext: () => void; onBack: () => voi
             animate={{ scale: 1 }}
             transition={{ type: "spring" }}
           >
-            <Check size={16} className="text-white" />
+            <Check size={14} className="text-white" />
           </motion.div>
         )}
       </div>
@@ -495,7 +495,7 @@ function ConnectPage({ onNext, onBack }: { onNext: () => void; onBack: () => voi
         className="flex items-center justify-center gap-2 text-sm text-[#FF591D] mb-6"
         style={{ fontFamily: FN }}
       >
-        <QrCode size={16} /> 扫描二维码手动连接
+        <QrCode size={14} /> 扫描二维码手动连接
       </button>
 
       <div className="mt-auto">
@@ -512,9 +512,9 @@ function ConnectPage({ onNext, onBack }: { onNext: () => void; onBack: () => voi
 
 // ??? Page 2: Model Recommend ??????????????????????????????????????????????????
 const MODELS = [
-  { id: 0, image: dinosaurModel, name: "小恐龙", time: "12 分钟", diff: "入门", diffBg: "#16A34A", cardBg: "#FFF4E8", border: "#86EFAC" },
-  { id: 1, image: rocketModel, name: "迷你火箭", time: "15 分钟", diff: "入门", diffBg: "#F24D17", cardBg: "#FFF4E8", border: "#FFD77B" },
-  { id: 2, image: starModel, name: "幸运星", time: "10 分钟", diff: "超简单", diffBg: "#B45309", cardBg: "#FFF4E8", border: "#FDE68A", recommended: true },
+  { id: 0, image: dinosaurModel, name: "小恐龙", time: "12 分钟", diff: "入门", diffBg: "#16A34A", cardBg: "#F5F6F8", border: "#86EFAC" },
+  { id: 1, image: rocketModel, name: "迷你火箭", time: "15 分钟", diff: "入门", diffBg: "#F24D17", cardBg: "#F5F6F8", border: "#FFD77B" },
+  { id: 2, image: starModel, name: "幸运星", time: "10 分钟", diff: "超简单", diffBg: "#B45309", cardBg: "#F5F6F8", border: "#FDE68A", recommended: true },
 ];
 
 function ModelPage({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
@@ -566,7 +566,7 @@ function ModelPage({ onNext, onBack }: { onNext: () => void; onBack: () => void 
                   <p className="font-bold text-gray-800 text-lg" style={{ fontFamily: FD }}>{m.name}</p>
                   <div className="flex items-center gap-3 mt-1">
                     <span className="flex items-center gap-1 text-gray-500 text-xs" style={{ fontFamily: FN }}>
-                      <Clock size={11} /> {m.time}
+                      <Clock size={14} /> {m.time}
                     </span>
                     <span
                       className="text-xs px-2 py-0.5 rounded-full font-bold text-white"
@@ -585,7 +585,7 @@ function ModelPage({ onNext, onBack }: { onNext: () => void; onBack: () => void 
                   }}
                   transition={{ duration: 0.28 }}
                 >
-                  {sel && <Check size={13} className="text-white" />}
+                  {sel && <Check size={14} className="text-white" />}
                 </motion.div>
               </div>
               {m.recommended && (
@@ -617,14 +617,23 @@ function ModelPage({ onNext, onBack }: { onNext: () => void; onBack: () => void 
 
 function SafetyPage({ onNext, onBack }: { onNext: () => void; onBack: () => void }) {
   const [coverStatus, setCoverStatus] = useState<"checking" | "closed">("checking");
+  const [temperatureStatus, setTemperatureStatus] = useState<"checking" | "normal">("checking");
+  const [baseStatus, setBaseStatus] = useState<"checking" | "ready">("checking");
 
   useEffect(() => {
-    // 模拟打印机门盖传感器回传；接入真实设备后替换为设备状态订阅。
-    const timer = setTimeout(() => setCoverStatus("closed"), 850);
-    return () => clearTimeout(timer);
+    // 模拟设备状态回传；接入真实设备后替换为设备状态订阅。
+    const coverTimer = setTimeout(() => setCoverStatus("closed"), 850);
+    const temperatureTimer = setTimeout(() => setTemperatureStatus("normal"), 1350);
+    const baseTimer = setTimeout(() => setBaseStatus("ready"), 1850);
+    return () => {
+      clearTimeout(coverTimer);
+      clearTimeout(temperatureTimer);
+      clearTimeout(baseTimer);
+    };
   }, []);
 
-  const allDone = coverStatus === "closed";
+  const allDone = coverStatus === "closed" && temperatureStatus === "normal" && baseStatus === "ready";
+  const checkProgress = allDone ? 100 : temperatureStatus === "normal" ? 76 : coverStatus === "closed" ? 52 : 28;
 
   return (
     <div className="xm-page flex h-full flex-col px-4 pb-24 pt-[64px]">
@@ -658,16 +667,16 @@ function SafetyPage({ onNext, onBack }: { onNext: () => void; onBack: () => void
               {coverStatus === "checking" ? "正在检查设备状态" : "设备检查已完成"}
             </span>
             {allDone && (
-              <motion.span className="font-bold text-green-500" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontFamily: FN }}>
+              <motion.span className="font-bold text-[#16803C]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} style={{ fontFamily: FN }}>
                 已通过
               </motion.span>
             )}
           </div>
-          <div className="h-2 overflow-hidden rounded-full bg-[#E8EAF0]" role="progressbar" aria-label="设备检查进度" aria-valuemin={0} aria-valuemax={100} aria-valuenow={allDone ? 100 : 42}>
+          <div className="h-2 overflow-hidden rounded-full bg-[#E8EAF0]" role="progressbar" aria-label="设备检查进度" aria-valuemin={0} aria-valuemax={100} aria-valuenow={checkProgress}>
             <motion.div
               className="h-full rounded-full"
               initial={{ width: "0%", backgroundColor: "#FF591D" }}
-              animate={{ width: allDone ? "100%" : "42%", backgroundColor: allDone ? "#22C55E" : "#FF591D" }}
+              animate={{ width: `${checkProgress}%`, backgroundColor: allDone ? "#16803C" : "#FF591D" }}
               transition={{ width: { duration: 0.4 }, backgroundColor: { duration: 0.2 } }}
             />
           </div>
@@ -688,26 +697,52 @@ function SafetyPage({ onNext, onBack }: { onNext: () => void; onBack: () => void
           {coverStatus === "checking" ? (
             <span aria-label="正在检测" className="h-6 w-6 animate-spin rounded-full border-2 border-[#FFD8C8] border-t-[#FF591D]" />
           ) : (
-            <span aria-label="检测通过" className="flex h-7 w-7 items-center justify-center rounded-full bg-[#E7F8EC] text-[#16803C]"><Check size={15} strokeWidth={3} /></span>
+            <span aria-label="检测通过" className="flex h-7 w-7 items-center justify-center rounded-full bg-[#E7F8EC] text-[#16803C]"><Check size={14} strokeWidth={3} /></span>
           )}
         </motion.section>
 
-        <motion.aside
-          className="xm-card flex items-center gap-3 p-3.5"
+        <motion.section
+          className="xm-card flex items-center gap-3 p-3.5 text-left"
           initial={{ opacity: 0, x: -14 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.08 }}
+          transition={{ delay: 0.06 }}
         >
-          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#FFF8EE] text-[#FF591D]"><Brush size={18} strokeWidth={2.2} /></span>
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#FFF8EE] text-[#FF591D]"><Thermometer size={18} strokeWidth={2.2} /></span>
           <div className="min-w-0 flex-1">
-            <p className="text-sm font-bold text-gray-800" style={{ fontFamily: FN }}>打印平台清洁提醒</p>
-            <p className="mt-0.5 text-xs text-gray-400" style={{ fontFamily: FN }}>开始打印前，请确认平台没有残留物</p>
+            <p className="text-sm font-bold text-gray-800" style={{ fontFamily: FN }}>温度状态</p>
+            <p className="mt-0.5 text-xs text-gray-400" style={{ fontFamily: FN }}>
+              {temperatureStatus === "checking" ? "正在检测设备温度…" : "当前温度 26°C，状态正常"}
+            </p>
           </div>
-          <span className="shrink-0 rounded-full bg-[#FFF2DE] px-2 py-1 text-[10px] font-extrabold text-[#B86A2E]">提醒</span>
-        </motion.aside>
+          {temperatureStatus === "checking" ? (
+            <span aria-label="正在检测温度" className="h-6 w-6 animate-spin rounded-full border-2 border-[#FFD8C8] border-t-[#FF591D]" />
+          ) : (
+            <span aria-label="温度检测通过" className="flex h-7 w-7 items-center justify-center rounded-full bg-[#E7F8EC] text-[#16803C]"><Check size={14} strokeWidth={3} /></span>
+          )}
+        </motion.section>
+
+        <motion.section
+          className="xm-card flex items-center gap-3 p-3.5 text-left"
+          initial={{ opacity: 0, x: -14 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.12 }}
+        >
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#FFF8EE] text-[#FF591D]"><Layers size={18} strokeWidth={2.2} /></span>
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-bold text-gray-800" style={{ fontFamily: FN }}>放置打印底座</p>
+            <p className="mt-0.5 text-xs text-gray-400" style={{ fontFamily: FN }}>
+              {baseStatus === "checking" ? "正在检测打印底座…" : "打印底座已正确放置并固定"}
+            </p>
+          </div>
+          {baseStatus === "checking" ? (
+            <span aria-label="正在检测打印底座" className="h-6 w-6 animate-spin rounded-full border-2 border-[#FFD8C8] border-t-[#FF591D]" />
+          ) : (
+            <span aria-label="打印底座检测通过" className="flex h-7 w-7 items-center justify-center rounded-full bg-[#E7F8EC] text-[#16803C]"><Check size={14} strokeWidth={3} /></span>
+          )}
+        </motion.section>
       </div>
 
-      <PrimaryBtn label={allDone ? "开始打印" : "正在检查防护罩…"} onClick={onNext} disabled={!allDone} />
+      <PrimaryBtn label={allDone ? "开始打印" : "正在检查设备…"} onClick={onNext} disabled={!allDone} />
     </div>
   );
 }
@@ -717,6 +752,7 @@ function SafetyPage({ onNext, onBack }: { onNext: () => void; onBack: () => void
 function PrintingPage({ active, onNext, onCancel, model }: { active: boolean; onNext: () => void; onCancel: () => void; model: (typeof MODELS)[number] }) {
   const [progress, setProgress] = useState(0);
   const [isSpeaking, setIsSpeaking] = useState(true);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
   const done = progress >= 100;
 
   useEffect(() => {
@@ -732,7 +768,7 @@ function PrintingPage({ active, onNext, onCancel, model }: { active: boolean; on
   }, [active, done, onNext]);
 
   return (
-    <div className="xm-page flex h-full flex-col px-4 pb-24 pt-[64px]">
+    <div className="xm-page relative flex h-full flex-col px-4 pb-24 pt-[64px]">
       <div className="mb-5">
         <h2 className="text-xl font-bold text-gray-800" style={{ fontFamily: FD }}>
           {done ? "打印完成" : "正在打印"}
@@ -788,7 +824,7 @@ function PrintingPage({ active, onNext, onCancel, model }: { active: boolean; on
                 onClick={() => setIsSpeaking(value => !value)}
                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#FFF2DE] text-[#FF591D] active:scale-95"
               >
-                <Volume2 size={15} strokeWidth={2.4} />
+                <Volume2 size={14} strokeWidth={2.4} />
               </button>
             </div>
             <p className="mt-1 text-xs leading-relaxed text-gray-500" style={{ fontFamily: FN }}>
@@ -811,7 +847,7 @@ function PrintingPage({ active, onNext, onCancel, model }: { active: boolean; on
       {!done && (
         <button
           type="button"
-          onClick={onCancel}
+          onClick={() => setShowCancelConfirm(true)}
           className="mt-4 flex h-11 w-full items-center justify-center rounded-full border border-[#FFD8C8] bg-white text-[14px] font-extrabold text-[#E64A14] shadow-[0_6px_16px_rgba(48,56,70,0.04)] transition-colors hover:bg-[#FFF7F2] active:scale-[0.98]"
           style={{ fontFamily: FN }}
         >
@@ -820,6 +856,47 @@ function PrintingPage({ active, onNext, onCancel, model }: { active: boolean; on
       )}
 
       {done && <p className="mt-4 text-center text-xs font-extrabold text-[#16803C]">正在打开作品完成页…</p>}
+
+      <AnimatePresence>
+        {showCancelConfirm && !done && (
+          <motion.div
+            className="absolute inset-0 z-[60] flex items-center justify-center bg-black/30 px-5 pb-[76px]"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShowCancelConfirm(false)}
+          >
+            <motion.section
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="cancel-print-title"
+              className="w-full rounded-[24px] bg-white p-5 shadow-[0_18px_48px_rgba(31,36,46,0.22)]"
+              initial={{ opacity: 0, scale: 0.92, y: 12 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.94, y: 8 }}
+              transition={{ type: "spring", stiffness: 360, damping: 32 }}
+              onClick={event => event.stopPropagation()}
+            >
+              <h2 id="cancel-print-title" className="text-center text-[18px] font-extrabold text-[#333333]">确定取消打印吗？</h2>
+              <p className="mt-2 text-center text-[13px] font-medium leading-relaxed text-[#666666]">取消后本次打印进度将不会保留。</p>
+              <button
+                type="button"
+                onClick={() => setShowCancelConfirm(false)}
+                className="mt-5 flex h-12 w-full items-center justify-center rounded-full bg-gradient-to-br from-[#FF9A66] via-[#FF591D] to-[#E64A14] text-[15px] font-extrabold text-white active:scale-[0.98]"
+              >
+                继续打印
+              </button>
+              <button
+                type="button"
+                onClick={onCancel}
+                className="mt-3 flex h-11 w-full items-center justify-center rounded-full bg-[#F5F6F8] text-[14px] font-extrabold text-[#666666] active:scale-[0.98]"
+              >
+                确认取消
+              </button>
+            </motion.section>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -864,7 +941,7 @@ function RewardPage({ onFinish, model }: { onFinish: () => void; model: (typeof 
           animate={{ rotate: [0, -12, 12, -12, 12, 0], scale: [1, 1.18, 1] }}
           transition={{ delay: 0.5, duration: 0.85 }}
         >
-          <Trophy size={27} />
+          <Trophy size={24} />
         </motion.div>
         <h1 className="text-[28px] font-extrabold text-[#182230]" style={{ fontFamily: FN }}>打印完成啦！</h1>
         <p className="text-gray-500 mt-2 text-sm" style={{ fontFamily: FN }}>你成功完成了第一个 3D 打印作品！</p>
@@ -881,7 +958,7 @@ function RewardPage({ onFinish, model }: { onFinish: () => void; model: (typeof 
         transition={{ delay: 0.45, type: "spring", stiffness: 140 }}
       >
         <motion.div
-          className="mb-3 flex h-[132px] w-[170px] items-center justify-center overflow-hidden rounded-[20px] bg-[#EEF8EE] p-2"
+          className="mb-3 flex h-[132px] w-[170px] items-center justify-center overflow-hidden rounded-[20px] p-2"
           animate={reduceMotion ? undefined : { y: [0, -5, 0] }}
           transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
         >
@@ -932,9 +1009,9 @@ const NAV = [
 ];
 
 const NEXT_PROJECTS = [
-  { id: 0, image: dinosaurModel, name: "小恐龙", time: "12分钟", bg: "#FFF4E8" },
-  { id: 2, image: starModel, name: "幸运星", time: "10分钟", bg: "#FFF4E8" },
-  { id: 1, image: rocketModel, name: "迷你火箭", time: "15分钟", bg: "#FFF4E8" },
+  { id: 0, image: dinosaurModel, name: "小恐龙", time: "12分钟", bg: "#F5F6F8" },
+  { id: 2, image: starModel, name: "幸运星", time: "10分钟", bg: "#F5F6F8" },
+  { id: 1, image: rocketModel, name: "迷你火箭", time: "15分钟", bg: "#F5F6F8" },
 ];
 
 const TAB_PLACEHOLDERS: Record<string, { icon: string; label: string; sub: string }> = {
@@ -968,14 +1045,14 @@ function ExplorePage() {
       <header className="sticky top-0 z-40 -mx-4 mb-5 bg-[#F6F7F9]/95 px-4 pb-1 pt-[64px] backdrop-blur-xl">
         <div className="flex items-center gap-2">
           <button onClick={() => setSidebarOpen(true)} aria-label="趣味玩法" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[#182230] active:bg-[#FFF2DE]">
-            <Menu size={22} strokeWidth={2.3} />
+            <Menu size={20} strokeWidth={2.3} />
           </button>
           <label className="flex h-11 min-w-0 flex-1 items-center gap-2 rounded-full border border-[#E2E5EA] bg-white px-3.5 text-[#8A9099] shadow-[0_4px_12px_rgba(48,56,70,0.04)]">
             <Search size={18} strokeWidth={2.3} />
             <input value={query} onChange={event => setQuery(event.target.value)} placeholder="搜索玩法名称" aria-label="搜索玩法名称" className="min-w-0 flex-1 bg-transparent text-sm font-semibold text-[#182230] outline-none placeholder:text-[#999999]" />
           </label>
           <button aria-label="通知，即将开放" className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-[#182230] active:bg-[#FFF2DE]">
-            <Bell size={21} strokeWidth={2.2} />
+            <Bell size={20} strokeWidth={2.2} />
           </button>
         </div>
 
@@ -998,7 +1075,7 @@ function ExplorePage() {
             <motion.aside initial={{ x: -260 }} animate={{ x: 0 }} exit={{ x: -260 }} transition={{ type: "spring", stiffness: 360, damping: 32 }} className="absolute left-0 top-0 z-[60] h-full w-[250px] bg-white px-5 pb-8 pt-[78px] shadow-[12px_0_28px_rgba(31,36,46,0.14)]">
               <div className="space-y-2">
                 {["活动", "赛事"].map(item => (
-                  <button key={item} onClick={() => { setActiveCategory(item); setSidebarOpen(false); }} className="flex h-12 w-full items-center rounded-[14px] px-3 text-left text-[15px] font-extrabold text-[#3E4651] active:bg-[#FFF2DE]">{item}<ChevronRight className="ml-auto" size={17} /></button>
+                  <button key={item} onClick={() => { setActiveCategory(item); setSidebarOpen(false); }} className="flex h-12 w-full items-center rounded-[14px] px-3 text-left text-[15px] font-extrabold text-[#3E4651] active:bg-[#FFF2DE]">{item}<ChevronRight className="ml-auto" size={14} /></button>
                 ))}
               </div>
             </motion.aside>
@@ -1043,7 +1120,7 @@ function ExplorePage() {
       </div>
       ) : (
         <motion.div key={activeCategory} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex min-h-[380px] flex-col items-center justify-center rounded-[24px] border border-[#E9EBF0] bg-white px-8 text-center">
-          <BookOpen size={38} className="text-[#FF591D]" />
+          <BookOpen size={24} className="text-[#FF591D]" />
           <h2 className="mt-4 text-lg font-extrabold text-[#182230]">{activeCategory}正在准备中</h2>
           <p className="mt-2 text-sm font-medium leading-relaxed text-[#8A9099]">没有找到匹配的作品</p>
           <button onClick={() => setActiveCategory("趣味玩法")} className="mt-5 h-11 rounded-full bg-gradient-to-br from-[#FF9A66] via-[#FF591D] to-[#E64A14] px-6 text-sm font-extrabold text-white shadow-[0_7px_16px_rgba(255,89,29,0.18)] active:scale-95">返回趣味玩法</button>
@@ -1079,8 +1156,8 @@ function MePage() {
           <Trophy size={20} className="text-[#FF591D]" /> 我的成就
         </div>
         <div className="flex items-center gap-3 text-gray-700">
-          <button disabled aria-label="通知，即将开放" title="即将开放" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/60 opacity-45"><Bell size={21} /></button>
-          <button disabled aria-label="设置，即将开放" title="即将开放" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/60 opacity-45"><Settings size={22} /></button>
+          <button disabled aria-label="通知，即将开放" title="即将开放" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/60 opacity-45"><Bell size={20} /></button>
+          <button disabled aria-label="设置，即将开放" title="即将开放" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/60 opacity-45"><Settings size={20} /></button>
         </div>
       </header>
 
@@ -1096,16 +1173,16 @@ function MePage() {
 
       <motion.section className="relative z-10 mt-5 overflow-hidden rounded-[20px] bg-white px-3.5 py-3 shadow-[0_14px_30px_rgba(225,101,40,0.20),inset_0_1px_0_rgba(255,255,255,0.9)]" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}>
         <div className="flex items-center justify-between">
-          <h2 className="flex items-center gap-2 text-[14px] font-extrabold text-[#30343B]"><WalletCards size={17} strokeWidth={2.1} className="text-[#666666]" /> 我的钱包</h2>
-          <ClipboardList size={16} strokeWidth={2} className="text-[#9AA0AA]" />
+          <h2 className="flex items-center gap-2 text-[14px] font-extrabold text-[#30343B]"><WalletCards size={18} strokeWidth={2.1} className="text-[#666666]" /> 我的钱包</h2>
+          <ClipboardList size={14} strokeWidth={2} className="text-[#9AA0AA]" />
         </div>
         <div className="mt-2.5 grid grid-cols-2 divide-x divide-[#EEE4DB]">
           <div className="pr-2.5">
-            <p className="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-[#8A8F98]"><CircleDollarSign size={15} strokeWidth={2.2} className="text-[#FFB33F]" /> Coins: <strong className="text-[16px] font-extrabold text-[#343A43]">0</strong></p>
+            <p className="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-[#8A8F98]"><CircleDollarSign size={14} strokeWidth={2.2} className="text-[#FFB33F]" /> Coins: <strong className="text-[16px] font-extrabold text-[#343A43]">0</strong></p>
             <button disabled title="即将开放" className="mt-2 h-7 w-full rounded-full bg-gradient-to-r from-[#FFB478] via-[#FF925B] to-[#FF7541] text-[11px] font-extrabold text-white shadow-[0_4px_10px_rgba(255,113,58,0.18)]">充值</button>
           </div>
           <div className="pl-2.5">
-            <p className="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-[#8A8F98]"><Flame size={15} strokeWidth={2.2} className="text-[#FF8A66]" /> 能量: <strong className="text-[16px] font-extrabold text-[#343A43]">0</strong></p>
+            <p className="flex items-center gap-1.5 whitespace-nowrap text-[11px] font-medium text-[#8A8F98]"><Flame size={14} strokeWidth={2.2} className="text-[#FF8A66]" /> 能量: <strong className="text-[16px] font-extrabold text-[#343A43]">0</strong></p>
             <button disabled title="即将开放" className="mt-2 h-7 w-full rounded-full bg-white text-[11px] font-extrabold text-[#343A43]">找能量</button>
           </div>
         </div>
@@ -1175,7 +1252,7 @@ function CreatePage() {
           <p className="mt-1 max-w-[220px] truncate text-sm font-semibold text-[#747B86]">{importedFile ?? "支持 STL、OBJ、3MF 文件"}</p>
         </div>
         <div className="flex h-14 w-14 items-center justify-center rounded-[18px] bg-[#FFF2DE] text-[#FF591D] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
-          <Upload size={34} strokeWidth={3} />
+          <Upload size={24} strokeWidth={3} />
         </div>
       </motion.button>
       <input
@@ -1186,7 +1263,7 @@ function CreatePage() {
         aria-label="选择 3D 模型文件"
         onChange={event => setImportedFile(event.target.files?.[0]?.name ?? null)}
       />
-      {importedFile && <p role="status" className="mt-2 text-center text-xs font-extrabold text-[#16803C]"><Check size={13} className="mr-1 inline" />文件已导入，可以进入切片准备</p>}
+      {importedFile && <p role="status" className="mt-2 text-center text-xs font-extrabold text-[#16803C]"><Check size={14} className="mr-1 inline" />文件已导入，可以进入切片准备</p>}
 
       <div className="mt-5 flex flex-col gap-4">
         {CREATE_TEMPLATES.map((template, index) => {
@@ -1218,7 +1295,7 @@ function CreatePage() {
                   className="flex h-11 min-w-[76px] items-center justify-center gap-1.5 rounded-full px-4 text-sm font-extrabold text-white active:scale-95"
                   style={{ background: done ? "#22C55E" : "#FF591D" }}
                 >
-                  {done ? <Check size={17} /> : <Download size={17} />}
+                  {done ? <Check size={18} /> : <Download size={18} />}
                   {done ? "已下载" : "下载"}
                 </button>
               </div>
@@ -1271,6 +1348,10 @@ function DevicePage({ hasPrinter, hasCompletedFirstPrint, lastModel, onConnect, 
               <p className="text-[10px] font-semibold text-[#8A9099]">耗材余量</p>
               <p className="mt-1 text-[14px] font-black text-[#182230]">72%</p>
             </div>
+             <div className="flex min-h-[58px] min-w-0 flex-1 flex-col items-center justify-center rounded-[16px] bg-[#F7F8FA] px-3 text-center">
+              <p className="text-[10px] font-semibold text-[#8A9099]">温度</p>
+              <p className="mt-1 text-[14px] font-extrabold text-[#182230]">26°C</p>
+            </div>
           </div>
 
           <button
@@ -1310,18 +1391,18 @@ function DevicePage({ hasPrinter, hasCompletedFirstPrint, lastModel, onConnect, 
           </div>
           {hasCompletedFirstPrint ? (
           <div className="flex items-center gap-3 rounded-[20px] border border-[#E9EBF0] bg-white p-3 shadow-[0_6px_18px_rgba(48,56,70,0.05)]">
-            <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-[16px] bg-[#EEF8EE] p-1">
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-[16px] p-1" style={{ background: lastModel.cardBg }}>
               <img src={lastModel.image} alt={`${lastModel.name}打印记录`} className="h-full w-full object-contain mix-blend-multiply" />
             </div>
             <div className="min-w-0 flex-1">
               <h3 className="text-[15px] font-extrabold text-[#182230]">{lastModel.name}</h3>
-              <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-[#8A9099]"><Clock size={12} />{lastModel.time} · PLA</p>
+              <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-[#8A9099]"><Clock size={14} />{lastModel.time} · PLA</p>
             </div>
             <span className="rounded-full bg-[#E7F8EC] px-2.5 py-1 text-[11px] font-extrabold text-[#16803C]">已完成</span>
           </div>
           ) : (
             <div className="rounded-[20px] border border-dashed border-[#D9DDE4] bg-white px-5 py-7 text-center">
-              <Printer size={28} className="mx-auto text-[#FF591D]" />
+              <Printer size={24} className="mx-auto text-[#FF591D]" />
               <p className="mt-3 text-sm font-extrabold text-[#182230]">还没有打印记录</p>
               <p className="mt-1 text-xs font-medium text-[#8A9099]">设备中心</p>
             </div>
@@ -1456,7 +1537,7 @@ function MainApp({ hasPrinter, hasCompletedFirstPrint, completedModel, onConnect
                           <p className="mt-1 text-[12px] font-medium leading-relaxed text-[#5F6670]">{typedReply}</p>
                           {typedReply.length >= assistantReply.length && <motion.button onClick={() => onModelSelect(rocketProject.id)} aria-label="选择迷你火箭" className="mt-3 flex w-full items-center gap-2.5 overflow-hidden rounded-[16px] bg-white p-2 text-left shadow-[0_6px_16px_rgba(48,56,70,0.06)] active:scale-[0.98]" initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}>
                             <div className="flex h-[58px] w-[68px] shrink-0 items-center justify-center overflow-hidden rounded-[12px]" style={{ background: rocketProject.bg }}><img src={rocketProject.image} alt="迷你火箭" className="h-full w-full object-contain mix-blend-multiply" /></div>
-                            <div className="min-w-0 flex-1"><p className="text-[13px] font-extrabold text-[#182230]">迷你火箭</p><p className="mt-0.5 text-[10px] font-medium text-[#8A9099]">约 {rocketProject.time} · 点击开始打印</p></div><ChevronRight size={16} className="shrink-0 text-[#FF591D]" />
+                            <div className="min-w-0 flex-1"><p className="text-[13px] font-extrabold text-[#182230]">迷你火箭</p><p className="mt-0.5 text-[10px] font-medium text-[#8A9099]">约 {rocketProject.time} · 点击开始打印</p></div><ChevronRight size={14} className="shrink-0 text-[#FF591D]" />
                           </motion.button>}
                         </motion.div>}
                       </AnimatePresence>
@@ -1485,7 +1566,7 @@ function MainApp({ hasPrinter, hasCompletedFirstPrint, completedModel, onConnect
         onContextMenu={event => event.preventDefault()}
         className={`flex h-[52px] w-full items-center justify-center gap-2 rounded-full border px-4 text-[13px] shadow-[0_10px_24px_rgba(255,89,29,0.14)] transition-colors ${isRecording ? "border-[#FF9A66] bg-[#FFF0E7] font-bold text-[#E64A14]" : "xm-text-body border-[#FFD8C8] bg-white/95"}`}
       >
-        {isRecording ? <><span className="flex h-5 items-end gap-1" aria-hidden="true">{[0, 1, 2, 3, 4].map(index => <motion.span key={index} className="w-1 rounded-full bg-[#FF591D]" animate={{ height: [5, 15 - (index % 2) * 4, 7] }} transition={{ duration: 0.5, repeat: Infinity, delay: index * 0.07, ease: "easeInOut" }} />)}</span><span>松开即可发送</span></> : <><Mic size={16} strokeWidth={2.5} /><span>按住说话</span></>}
+        {isRecording ? <><span className="flex h-5 items-end gap-1" aria-hidden="true">{[0, 1, 2, 3, 4].map(index => <motion.span key={index} className="w-1 rounded-full bg-[#FF591D]" animate={{ height: [5, 15 - (index % 2) * 4, 7] }} transition={{ duration: 0.5, repeat: Infinity, delay: index * 0.07, ease: "easeInOut" }} />)}</span><span>松开即可发送</span></> : <><Mic size={18} strokeWidth={2.5} /><span>按住说话</span></>}
       </button></div>}
     </div>
   );
