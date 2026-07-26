@@ -6,8 +6,8 @@
   --xm-accent: #ff591d;
   --xm-accent-pressed: #e64a14;
   --xm-accent-soft: #fff0e7;
-  --xm-font-meta: 11px;
-  --xm-font-caption: 13px;
+  --xm-font-meta: 10px;
+  --xm-font-caption: 12px;
   --xm-font-body: 14px;
   --xm-font-control: 16px;
   --xm-font-section: 18px;
@@ -22,8 +22,13 @@
   --xm-border: rgba(24, 34, 48, 0.08);
   --xm-card-radius: 20px;
   --xm-large-radius: 24px;
+  --xm-control-radius: 14px;
+  --xm-compact-radius: 16px;
   --xm-shadow: 0 12px 36px rgba(31, 36, 46, 0.075);
   --xm-shadow-soft: 0 4px 16px rgba(31, 36, 46, 0.055);
+  --xm-shadow-brand: 0 8px 18px rgba(255, 89, 29, 0.20);
+  --xm-shadow-modal: 0 18px 48px rgba(31, 36, 46, 0.22);
+  --xm-shadow-nav: 0 -8px 24px rgba(31, 36, 46, 0.08);
   --xm-page-gutter: 16px;
   --xm-page-top: 64px;
   --xm-nav-height: 83px;
@@ -76,6 +81,23 @@ body {
 [class~="text-[12px]"] {
   font-size: var(--xm-font-caption);
   line-height: 1.45;
+}
+
+[class~="text-[13px]"],
+[class~="text-[14px]"],
+[class~="text-[15px]"] {
+  font-size: var(--xm-font-body);
+}
+
+[class~="text-[20px]"],
+[class~="text-[21px]"],
+[class~="text-[22px]"],
+[class~="text-[23px]"] {
+  font-size: 22px;
+}
+
+[class~="text-[25px]"] {
+  font-size: var(--xm-font-title);
 }
 
 .xm-page {
