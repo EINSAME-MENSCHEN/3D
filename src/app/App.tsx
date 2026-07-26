@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import {
   Wifi, WifiOff, Check, ChevronRight, ArrowLeft, Volume2, QrCode, ShieldCheck, Layers,
@@ -1775,11 +1775,13 @@ function PersistentNav({ active, locked = false, onSelect }: { active: string; l
 // ??? Root ?????????????????????????????????????????????????????????????????????
 
 export default function App() {
+  const isGitHubPreview = window.location.hostname.endsWith("github.io");
   const [hasPrinter, setHasPrinter] = usePersistentState("xmaker.hasPrinter", false);
   const [hasCompletedFirstPrint, setHasCompletedFirstPrint] = usePersistentState("xmaker.hasCompletedFirstPrint", false);
   const [selectedModelId, setSelectedModelId] = usePersistentState("xmaker.selectedModelId", 0);
   const [completedModelId, setCompletedModelId] = usePersistentState("xmaker.completedModelId", 0);
   const [page, setPage] = useState(() => {
+    if (isGitHubPreview) return 0;
     try {
       const savedPrinter = JSON.parse(window.localStorage.getItem("xmaker.hasPrinter") ?? "false");
       const savedCompletion = JSON.parse(window.localStorage.getItem("xmaker.hasCompletedFirstPrint") ?? "false");
@@ -1808,6 +1810,17 @@ export default function App() {
   const back = () => setFlowPage(p => Math.max(0, p - 1));
   const selectedModel = MODELS.find(model => model.id === selectedModelId) ?? MODELS[0];
   const completedModel = MODELS.find(model => model.id === completedModelId) ?? MODELS[0];
+
+  useLayoutEffect(() => {
+    if (!isGitHubPreview) return;
+    setHasPrinter(false);
+    setHasCompletedFirstPrint(false);
+    setIsPrinting(false);
+    flowOwnerRef.current = "ai";
+    aiPageRef.current = 0;
+    setTab("ai");
+    setPage(0);
+  }, [isGitHubPreview]);
 
   useEffect(() => {
     if (!hasPrinter && tab === "ai" && page === 6) setFlowPage(0);
