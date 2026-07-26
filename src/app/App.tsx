@@ -1162,7 +1162,7 @@ function RewardPage({ onBack, onViewWork, onCreateAnother, model }: { onBack: ()
         <button
           type="button"
           onClick={onCreateAnother}
-          className="flex h-14 w-full items-center justify-center rounded-full bg-[#F5F6F8] text-[16px] font-extrabold text-[#666666] active:scale-[0.98]"
+          className="flex h-14 w-full items-center justify-center rounded-full bg-white text-[16px] font-extrabold text-[#333333] active:scale-[0.98]"
         >
           再做一个
         </button>
@@ -1969,13 +1969,6 @@ export default function App() {
             "0 50px 100px rgba(255,122,0,0.22), 0 20px 48px rgba(0,0,0,0.14), inset 0 0 0 1.5px rgba(255,255,255,0.55)",
         }}
       >
-        {/* Dynamic island */}
-        <div
-          aria-hidden="true"
-          className="absolute left-1/2 z-50 -translate-x-1/2 bg-black"
-          style={{ top: 10, width: 126, height: 37, borderRadius: 999 }}
-        />
-
         {/* Status bar */}
         <div className="absolute left-0 right-0 top-0 z-40 flex h-[59px] items-center justify-between px-[22px] text-[#333333]">
           <span className="text-[15px] font-semibold tracking-[-0.02em]" style={{ fontFamily: FN }}>9:41</span>
